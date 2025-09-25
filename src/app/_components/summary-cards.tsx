@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "../_providers/auth-provider";
 import { useQuery } from "@tanstack/react-query";
-import { listHoldings, HoldingDoc } from "@/lib/fs";
+import { listHoldings } from "@/lib/fs";
 import { useFx } from "@/hooks/useFx";
 import { useQuote } from "@/hooks/useQuote";
 

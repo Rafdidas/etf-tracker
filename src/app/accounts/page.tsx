@@ -29,17 +29,29 @@ export default function AccountsPage() {
   const mUpsert = useMutation({
     mutationFn: async () => {
       if (!user) throw new Error("로그인 필요");
-      const payload = {
-        symbol: form.symbol.trim().toUpperCase(),
-        avgPrice: Number(form.avgPrice),
-        quantity: Number(form.quantity),
+      const symbol = form.symbol.trim().toUpperCase();
+      const avgPrice = Number(form.avgPrice);
+      const quantity = Number(form.quantity);
+      if (!symbol) throw new Error("심볼을 입력하세요.");
+      if (!Number.isFinite(avgPrice) || avgPrice < 0)
+        throw new Error("평단이 올바르지 않습니다.");
+      if (!Number.isFinite(quantity) || quantity <= 0)
+        throw new Error("수량이 올바르지 않습니다.");
+
+      return upsertHolding(user.uid, {
+        symbol,
+        avgPrice,
+        quantity,
         currency: form.currency,
-      };
-      return upsertHolding(user.uid, payload);
+      });
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["holdings", user?.uid] });
       setForm({ symbol: "", avgPrice: "", quantity: "", currency: "USD" });
+    },
+    onError: (e: any) => {
+      console.error("mUpsert error:", e?.code, e?.message, e);
+      alert(e?.message ?? "보유 추가 중 오류");
     },
   });
 
@@ -52,15 +64,27 @@ export default function AccountsPage() {
   });
 
   const saveAccounts = async () => {
-    if (!user) return;
-    const year = new Date().getFullYear();
-    await upsertAccountsYear(user.uid, year, {
-      deposits: 0,
-      withdrawals: 0,
-      cashKRW: 0,
-      cashUSD: 0,
-    });
-    alert("올해 계좌 문서 생성/업데이트 완료");
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    try {
+      const year = new Date().getFullYear();
+
+      // 🔐 숫자 가드 (혹시라도 NaN 방지)
+      const payload = { deposits: 0, withdrawals: 0, cashKRW: 0, cashUSD: 0 };
+      for (const [k, v] of Object.entries(payload)) {
+        if (!Number.isFinite(v as number) || (v as number) < 0) {
+          throw new Error(`잘못된 숫자 입력: ${k}=${v}`);
+        }
+      }
+
+      await upsertAccountsYear(user.uid, year, payload);
+      alert("올해 계좌 문서 생성/업데이트 완료");
+    } catch (e: any) {
+      console.error("upsertAccountsYear error:", e?.code, e?.message, e);
+      alert(`${e?.code ?? "error"}: ${e?.message ?? "계좌 저장 중 오류"}`);
+    }
   };
 
   if (loading) return <main className="p-6">로딩...</main>;
@@ -80,16 +104,16 @@ export default function AccountsPage() {
             className="rounded border px-3 py-2"
           />
           <input
-            value={form.avgPrice}
-            onChange={(e) => setForm((s) => ({ ...s, avgPrice: e.target.value }))}
-            placeholder="평단"
+            value={form.quantity}
+            onChange={(e) => setForm((s) => ({ ...s, quantity: e.target.value }))}
+            placeholder="수량"
             className="rounded border px-3 py-2"
             inputMode="decimal"
           />
           <input
-            value={form.quantity}
-            onChange={(e) => setForm((s) => ({ ...s, quantity: e.target.value }))}
-            placeholder="수량"
+            value={form.avgPrice}
+            onChange={(e) => setForm((s) => ({ ...s, avgPrice: e.target.value }))}
+            placeholder="평단"
             className="rounded border px-3 py-2"
             inputMode="decimal"
           />
@@ -123,7 +147,7 @@ export default function AccountsPage() {
             {holdings.map((h: HoldingDoc) => (
               <li key={h.holdingId} className="py-2 flex items-center justify-between">
                 <span className="text-sm">
-                  {h.symbol} · {h.quantity} @ {h.avgPrice} ({h.currency})
+                  {h.symbol} · {h.quantity} · {h.avgPrice} ({h.currency})
                 </span>
                 <button
                   onClick={() => mDelete.mutate(h.holdingId)}

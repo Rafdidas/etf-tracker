@@ -38,10 +38,7 @@ export default function LoginPage() {
       // TODO: 로그인 후 라우팅 (예: window.location.href = "/")
     } catch (e: any) {
       // 팝업이 취소되거나 겹친 경우: 조용히 무시
-      if (
-        e?.code === "auth/cancelled-popup-request" ||
-        e?.code === "auth/popup-closed-by-user"
-      ) {
+      if (e?.code === "auth/cancelled-popup-request" || e?.code === "auth/popup-closed-by-user") {
         // 필요시 여기서 토스트 정도만
         // toast.info("로그인 팝업이 취소되었습니다.");
         return;

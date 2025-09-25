@@ -12,15 +12,13 @@ export type HoldingDoc = {
 };
 
 export async function listHoldings(uid: string) {
-  const q = query(collection(db, "holdings", uid, /* subcollection */ ""), where("symbol", "!=", null));
-  // Firestore는 빈 서브콜렉션 경로를 못 받으므로 아래처럼 명시:
-  const col = collection(db, "holdings", uid, "items");
+  const col = collection(db, "holdings", uid, "items"); // ✅ 유효 경로만 사용
   const snap = await getDocs(col);
   return snap.docs.map(d => ({ holdingId: d.id, ...(d.data() as Omit<HoldingDoc,"holdingId">) })) as HoldingDoc[];
 }
 
 export async function upsertHolding(uid: string, h: Omit<HoldingDoc,"holdingId"|"createdAt"|"updatedAt"> & { holdingId?: string }) {
-  const id = h.holdingId ?? crypto.randomUUID();
+  const id = h.holdingId ?? `${h.symbol}_${h.currency}`; // ← 심볼+통화로 키 고정
   const ref = doc(db, "holdings", uid, "items", id);
   await setDoc(ref, { ...h, updatedAt: serverTimestamp(), createdAt: serverTimestamp() }, { merge: true });
   return id;
@@ -34,9 +32,24 @@ export async function deleteHolding(uid: string, holdingId: string) {
 /** accounts/{uid}/{year} */
 export type AccountsYearDoc = { year: number; deposits: number; withdrawals: number; cashKRW: number; cashUSD: number; createdAt?: any; updatedAt?: any; };
 
-export async function upsertAccountsYear(uid: string, y: number, data: Omit<AccountsYearDoc,"year"|"createdAt"|"updatedAt">) {
-  const ref = doc(db, "accounts", uid, String(y));
-  await setDoc(ref, { year: y, ...data, updatedAt: serverTimestamp(), createdAt: serverTimestamp() }, { merge: true });
+export async function upsertAccountsYear(
+  uid: string,
+  y: number,
+  data: Omit<AccountsYearDoc, "year" | "createdAt" | "updatedAt">
+) {
+  const ref = doc(db, "accounts", uid, "years", String(y));
+
+  // 🔎 디버그 로그
+  console.log("[upsertAccountsYear] uid:", uid);
+  console.log("[upsertAccountsYear] year:", y);
+  console.log("[upsertAccountsYear] ref.path:", ref.path);
+  console.log("[upsertAccountsYear] projectId:", (db as any)?.app?.options?.projectId);
+
+  await setDoc(
+    ref,
+    { year: y, ...data, updatedAt: serverTimestamp(), createdAt: serverTimestamp() },
+    { merge: true }
+  );
 }
 
 /** alerts/{uid}/{alertId} */
