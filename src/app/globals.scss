@@ -1,0 +1,805 @@
+/* ========= font.css ========= */
+@use "./../../public/assets/font/pretendard/pretendard.css";
+/* ============================ */
+
+/* ========= variables.scss 변수  ========= */
+@use "./variables.scss";
+/* ======================================= */
+
+
+/* ========= tailwind ========= */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* ================================ */
+
+/* ========= reset.css ========= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Pretendard, sans-serif;
+  line-height: 1.5;
+
+  /* orverflow-y-scroll 시 레이아웃 틀어짐 방지 */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+  scrollbar-width: none;
+  /* Firefox */
+
+  &::-webkit-scrollbar {
+    //width: 16px; /* 스크롤바의 너비 */
+    //height: 16px;
+
+    /* Chrome/Safari */
+    display: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 10%;
+    /* 스크롤바의 길이 */
+    background: #C9CDD4;
+    /* 스크롤바의 색상 */
+    border-radius: 10px;
+    background-clip: padding-box;
+    border: 4px solid transparent;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    /*스크롤바 뒷 배경 색상*/
+  }
+}
+
+*:after,
+*:before {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+  /* iOS 스무스 스크롤 */
+}
+
+body {
+  height: 100dvh;
+}
+
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  min-width: 100%;
+}
+
+fieldset {
+  border: none;
+}
+
+canvas,
+img,
+picture,
+svg,
+video {
+  display: block;
+}
+
+/* ============================= */
+
+/* ========= SzRow, SzColumn.css ========= */
+.sz-row.sz-row--grow>* {
+  flex: 1;
+}
+
+.sz-row:not(.sz-row--allow-grow)>[class*="w-"] {
+  flex: initial;
+}
+
+/* ============================= */
+
+/* ========= input[type:search].css ========= */
+input[type="search"]::-webkit-search-cancel-button {
+  @apply appearance-none h-4 w-4 bg-contain bg-no-repeat cursor-pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8ZM7.99699 6.75931L6.09014 4.85095L6.08436 4.84561C5.91894 4.6926 5.70066 4.60949 5.47522 4.61395C5.24995 4.6184 5.03515 4.70987 4.87579 4.86941C4.71653 5.02886 4.62517 5.24375 4.62072 5.46899C4.61628 5.69421 4.69908 5.91261 4.85193 6.07824L4.85732 6.08407L6.76469 7.99303L4.86558 9.89433C4.78344 9.97388 4.71768 10.0689 4.67213 10.1739C4.62596 10.2803 4.60137 10.3951 4.60003 10.5113C4.59869 10.6277 4.62069 10.7429 4.66434 10.8502C4.70802 10.9576 4.77273 11.0555 4.85491 11.1379C4.93719 11.2203 5.0349 11.2851 5.14213 11.329C5.24989 11.373 5.36514 11.3949 5.48108 11.3937C5.59721 11.3925 5.71195 11.3681 5.81859 11.3219C5.92374 11.2763 6.01875 11.2104 6.09831 11.1282L7.99705 9.2274L9.89362 11.1261C9.97191 11.2092 10.066 11.2763 10.1705 11.3233C10.278 11.3717 10.3937 11.3975 10.5108 11.3998C10.6282 11.4021 10.745 11.3807 10.8539 11.3368C10.9627 11.2929 11.0616 11.2276 11.1447 11.1443C11.2277 11.0613 11.293 10.9624 11.3369 10.8534C11.3807 10.7444 11.4021 10.6277 11.3998 10.5103C11.3975 10.3929 11.3715 10.2773 11.3234 10.1701C11.2767 10.0661 11.21 9.97178 11.1266 9.89305L9.23004 7.99306L11.1318 6.08897C11.2124 6.00843 11.2769 5.91256 11.321 5.80615C11.3648 5.7002 11.3873 5.58671 11.3873 5.47232C11.3873 5.35792 11.3648 5.24443 11.321 5.13848C11.2771 5.03247 11.2127 4.93633 11.1318 4.85548M11.1318 4.85548C11.0506 4.77425 10.9546 4.71028 10.8492 4.66656C10.7435 4.62271 10.63 4.59998 10.5152 4.59998C10.4003 4.59998 10.2869 4.62274 10.1812 4.66656C10.076 4.71023 9.9797 4.77421 9.89834 4.8557L7.99699 6.75931' fill='%23676C75'/%3E%3C/svg%3E");
+}
+
+/* ========================================== */
+
+/* ========= table.css ========= */
+.table-container {
+  @apply border border-solid border-outlineLow rounded-xl overflow-auto;
+}
+
+.table {
+
+  /* thead의 마지막 row만 바텀 적용 */
+  >thead>tr:last-child>th {
+    @apply border-b-[1px] border-solid border-outlineLowest;
+
+  }
+
+  /*  마지막 열을 제외한 모든 열의 오른쪽에 테두리를 적용합니다 */
+  th:not(:last-child),
+  td:not(:last-child) {
+    @apply border-r-[1px] border-solid border-outlineLowest;
+  }
+
+  /* 마지막 행을 제외한 모든 행의 하단에 테두리를 적용합니다 */
+  >thead>tr:not(:last-child)>th,
+  >thead>tr:not(:last-child)>td,
+  >tbody>tr:not(:last-child)>th,
+  >tbody>tr:not(:last-child)>td,
+  >tfoot>tr:not(:last-child)>th,
+  >tfoot>tr:not(:last-child)>td,
+  >tr:not(:last-child)>td,
+  >tr:not(:last-child)>th,
+  >thead:not(:last-child),
+  >tbody:not(:last-child),
+  >tfoot:not(:last-child) {
+    @apply border-b-[1px] border-solid border-outlineLowest;
+  }
+
+  thead {
+    tr {
+      @apply h-[40px] bg-surfaceContainerLowest;
+    }
+
+    th {
+      @apply whitespace-nowrap h-[42px] px-[10px] text-[13px] text-onSurfaceContainer font-medium;
+    }
+  }
+
+  tbody {
+    tr {
+      @apply h-[46px] bg-surfaceContainer;
+
+      &:hover {
+        @apply cursor-pointer border-outlineLowest bg-surfaceContainerLower
+      }
+    }
+
+    td {
+      @apply whitespace-nowrap py-[3px] px-[10px] text-[15px] text-onSurfaceHighest font-normal;
+    }
+  }
+
+  /* 테이블 체크박스 중앙정렬 */
+  .checkbox-container {
+    @apply justify-center;
+  }
+}
+
+/* =========================== */
+
+/* ============= SzTable ============== */
+@layer components {
+  .wrap-break-word {
+    overflow-wrap: break-word;
+  }
+
+  /* 직계 thead/tbody 자식만 타겟 */
+  .szTable>table>thead>tr>th,
+  .szTable>table>tbody>tr>td {
+    @apply border-b border-r border-surfaceLow;
+  }
+
+  // colSpan rowSpan 고려 위해 주석처리
+  // /* 마지막 td/th의 오른쪽 테두리 제거 */
+  // .szTable > table > thead > tr > th:last-child,
+  // .szTable > table > tbody > tr > th:last-child,
+  // .szTable > table > tbody > tr > td:last-child {
+  //   @apply border-r-0;
+  // }
+
+  // /* 마지막 행 아래쪽 테두리 제거 */
+  // .szTable > table > tbody > tr:last-child > th,
+  // .szTable > table > tbody > tr:last-child > td {
+  //   @apply border-b-0;
+  // }
+
+  /* 사이즈별 높이 */
+  .szTable--size-sm>table>thead>tr>th,
+  .szTable--size-sm>table>tbody>tr>td,
+  .szTable--size-sm>table>tbody>tr>th,
+  .szTable--size-sm>table>tbody>tr>td {
+    @apply px-[6px] h-[38px];
+  }
+
+  /* borderRadius 옵션 적용 시 모서리 둥글게 */
+  .szTable.bd-radius {
+    @apply rounded-[6px];
+  }
+
+  .szTable.bd-radius>table>thead>tr>th:first-child {
+    @apply rounded-t-[6px];
+  }
+
+  .szTable.bd-radius>table>tbody>tr:first-child>th:first-child {
+    @apply rounded-tl-[6px];
+  }
+
+  .szTable.bd-radius>table>tbody>tr:last-child>th:first-child {
+    @apply rounded-l-[6px];
+  }
+
+  .szTable.bd-radius>table>tbody>tr:last-of-type>td:first-child {
+    @apply rounded-bl-[6px];
+  }
+
+  .szTable.bd-radius>table>thead>tr>th:last-child {
+    @apply rounded-tr-[6px];
+  }
+
+  .szTable.bd-radius>table>tbody>tr:last-child>td:last-child {
+    @apply rounded-br-[6px];
+  }
+
+  /* borderless일 때 내부 th/td 라인 제거 */
+  .szTable--variant-borderless>table>thead>tr>th,
+  .szTable--variant-borderless>table>tbody>tr>th,
+  .szTable--variant-borderless>table>tbody>tr>td {
+    @apply border-none;
+  }
+
+  /* borderless일 때 내부 bg color 제거 */
+  .szTable--variant-borderless>table>thead>tr>th,
+  .szTable--variant-borderless>table>tbody>tr>th {
+    @apply bg-white;
+  }
+
+  .szTable .form-field {
+    justify-content: center;
+    gap: 0;
+  }
+
+  /* =========== td font style 공통 =========== */
+  .th-font-style {
+    @apply text-onSurfaceHigh text-[13px] font-medium wrap-break-word;
+  }
+
+  .td-font-style {
+    @apply text-onSurfaceContainerHighest text-[15px] font-normal wrap-break-word;
+  }
+
+  /* ========================================= */
+
+  /* =========== table 정렬 =========== */
+  .szTable.table-right table tr>th,
+  .szTable.table-right table tr>td {
+    @apply text-right;
+  }
+
+  .szTable.table-center table tr>th,
+  .szTable.table-center table tr>td {
+    @apply text-center;
+  }
+
+  /* ========================================= */
+}
+
+/* =========================== */
+
+/* ========= nodes.css ========= */
+.isInvalid {
+  border: 1px solid red !important
+}
+
+/* ============================= */
+
+/* ========= form-field.css ========= */
+.form-field {
+  @apply flex flex-col gap-1 h-full;
+
+  .checkbox-container,
+  .radio-container {
+    //@apply min-h-[32px];
+  }
+
+  &--top {
+    @apply flex-col;
+  }
+
+  &--bottom {
+    @apply flex-col-reverse justify-end;
+  }
+
+  &--left {
+    @apply flex-row justify-start;
+  }
+
+  &--right {
+    @apply flex-row-reverse justify-end;
+  }
+
+  &--empty {
+    @apply justify-between gap-0;
+  }
+
+  &--gapMd {
+    @apply gap-2;
+  }
+
+  &__help-text {
+    @apply text-[12px] text-onSurfaceHigher;
+
+    &--error {
+      @apply text-red;
+    }
+  }
+
+  &__label {
+    min-width: 54px;
+  }
+
+  .p-focus {
+    @apply border-primaryLowest;
+  }
+}
+
+/* ================================== */
+
+/* ========= multiTag.css ========= */
+.tag-container {
+  margin: 0.5rem 0;
+}
+
+.tag-scroll-box::selection {
+  background: transparent;
+  color: inherit;
+}
+
+.tag-list {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tag-item-wrapper {
+  cursor: pointer;
+}
+
+.tag-item {
+  border-radius: 10px;
+  padding: 5px 11px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tag-close-btn {
+  font-weight: bold;
+  margin-left: 3px;
+  background: none;
+  border: none;
+}
+
+/* ============================= */
+/* ======= jsonEditor.css ====== */
+.jsoneditor {
+  border: none !important;
+}
+
+.jsoneditor-tree {
+  min-width: auto !important;
+  width: auto !important;
+}
+
+/* ============================= */
+
+/* ========= tree.css ========= */
+.drag-over-highlight,
+.p-treenode-droppoint-active {
+  @apply bg-primaryContainer border border-solid border-primary;
+}
+
+/* =============================== */
+
+/* ================================================================================ */
+
+/* ========= fullCalender.css ========= */
+.full-calendar {
+
+  //헤더 아이템 간격
+  .fc-direction-ltr .fc-toolbar>*> :not(:first-child),
+  .fc-direction-ltr .fc-toolbar>*>.fc-button-group> :not(:first-child) {
+    @apply ml-2;
+  }
+
+  //헤더 공통 버튼 포커스
+  .fc .fc-button-primary:not(:disabled).fc-button-active:focus,
+  .fc .fc-button-primary:not(:disabled):active:focus {
+    @apply shadow-none;
+  }
+
+  .fc-button-primary:focus {
+    @apply shadow-none;
+  }
+
+  //헤더 좌측 아이템
+  .fc-toolbar-chunk:first-of-type {
+    @apply flex;
+
+    .fc-today-button {
+      @apply text-sm bg-surfaceLowest border-transparencyMid text-onSurfaceContainer hover:bg-surfaceContainerLow hover:border-transparencyHigh;
+    }
+
+    .fc-today-button:disabled {
+      @apply bg-opacity-65 pointer-events-none;
+    }
+
+    .fc-prev-button,
+    .fc-next-button {
+      @apply w-8 h-8 px-0 py-0 bg-transparent border-none text-onSurfaceContainer hover:bg-transparency;
+    }
+
+    .fc-toolbar-title {
+      @apply flex items-center text-xl font-semibold text-onSurfaceContainer;
+    }
+  }
+
+  //헤더 우측 버튼그룹
+  .fc-button-group {
+    @apply flex h-10 bg-transparency border-transparencyLow px-[3px] py-[3px] rounded-lg;
+
+    >.fc-button {
+      @apply h-8 px-3 py-0 bg-transparent border-transparent text-sm;
+    }
+
+    .fc-button-primary {
+      @apply text-onSurfaceContainer hover:bg-surfaceContainerLow;
+    }
+
+    .fc-button-primary:not(:disabled).fc-button-active,
+    .fc-button-primary:not(:disabled):active {
+      @apply bg-surfaceContainer border-transparencyMid text-onSurfaceContainer;
+    }
+
+    .fc-button:not(:last-child),
+    .fc-button:not(:first-child) {
+      @apply rounded-md
+    }
+  }
+
+  //테이블 헤더
+  .fc-col-header-cell-cushion {
+    @apply py-1.5 text-sm font-medium;
+  }
+
+  //요일
+  .fc-daygrid-day-number {
+    @apply text-xs;
+  }
+
+  //일요일
+  .fc-day-sun {
+    @apply text-red;
+  }
+
+  //토요일
+  .fc-day-sat {
+    @apply text-blue;
+  }
+
+  //테이블 보더
+  .fc-theme-standard .fc-scrollgrid,
+  .fc-theme-standard td,
+  .fc-theme-standard th {
+    @apply border-outline;
+  }
+
+  //금일 배경색
+  .fc-daygrid-day.fc-day-today {
+    @apply bg-primaryContainerLower
+  }
+
+  //이벤트 제목
+  .fc-h-event .fc-event-title {
+    @apply px-1 text-xs font-light;
+  }
+}
+
+/* ================================= */
+
+/* ========== 상단 날씨 롤링 ========= */
+.weather-transition {
+  animation: weatherSlide 20s ease-in-out infinite;
+}
+
+@keyframes weatherSlide {
+  0% {
+    transform: translateY(0);
+  }
+
+  20% {
+    transform: translateY(0);
+  }
+
+  25% {
+    transform: translateY(-2rem);
+  }
+
+  40% {
+    transform: translateY(-2rem);
+  }
+
+  45% {
+    transform: translateY(-4rem);
+  }
+
+  60% {
+    transform: translateY(-4rem);
+  }
+
+  65% {
+    transform: translateY(-6rem);
+  }
+
+  80% {
+    transform: translateY(-6rem);
+  }
+
+  85% {
+    transform: translateY(-8rem);
+  }
+
+  100% {
+    transform: translateY(-8rem);
+  }
+}
+
+/* ================================= */
+/* ====raonkuploader 파일 업로드====== */
+#raonkUpLoader {
+  height: 181px;
+}
+
+/* ================================= */
+
+
+/* ========== IBSheet =========== */
+// button : default 
+.IBMTMain {
+  u[class*="IBMTSheetButton"] {
+    display: inline-flex;
+    height: 32px;
+    min-width: 32px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 12px;
+    border-radius: 6px;
+    border: 1px solid var(--transparency-mid);
+    background: var(--surface-container);
+    color: var(--on-surface-container);
+
+    &:hover {
+      background-color: var(--surface-container-lower);
+      border: 1px solid var(--transparency-high);
+    }
+  }
+
+  //  :pressed
+  .IBMTToolButtonButton1 {
+    background-color: var(--surface-container-mid);
+    border: 1px solid var(--transparency-high);
+    color: var(--on-surface-container);
+
+    &:active {
+      background-color: var(--surface-container-mid);
+      border: 1px solid var(--transparency-high);
+      color: var(--on-surface-container);
+    }
+  }
+}
+
+/* =============================== */
+
+.body-scrollable {
+  @apply overflow-auto;
+}
+
+.number-pad {
+  &__item {
+    @apply flex-1 h-16 px-2 bg-primaryContainerHigher text-center text-onPrimary text-body-bold-sm;
+
+    &:active {
+      @apply bg-primaryContainerHighest;
+    }
+  }
+}
+
+/* =============================== */
+.p-calendar .p-datepicker.w-full {
+  width: 100% !important;
+}
+
+/* ========= datepicker ========= */
+.form-field .p-focus {
+  border: none;
+}
+
+.calendar_wrap>span[data-pc-name="calendar"] {
+  display: none;
+}
+
+.p-datepicker {
+  margin: 0;
+  padding: 0;
+  border: none;
+
+  .p-datepicker-calendar {
+    border-collapse: separate;
+    border-spacing: 0 4px;
+  }
+
+  p-datepicker-header {
+    margin-bottom: 16px;
+  }
+
+  tr[data-pc-section=tablebodyrowprops] {
+    td.p-datepicker-today>span {
+      background-color: var(--on-primary);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+
+    }
+
+    & .p-highlight>span {
+      background-color: var(--primary);
+      border: 1px solid var(--primary);
+      color: var(--on-primary);
+    }
+
+    & .p-highlight>span {
+      background-color: var(--primary);
+      border: 1px solid var(--primary);
+      color: var(--on-primary);
+    }
+
+    span[aria-selected="true"] {
+      background: transparent;
+      color: inherit;
+
+      >span {
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        position: relative;
+        z-index: 1;
+      }
+    }
+
+    // 선택된 셀(td)
+    >td:has(> span[aria-selected="true"] > span[class^="range-"]) {
+
+      // 시작
+      &:has(> span > span.range-start) {
+        background: var(--surface-container-mid);
+        border-top-left-radius: 999px;
+        border-bottom-left-radius: 999px;
+
+        >span[aria-selected="true"]>span {
+          background: var(--primary);
+          color: var(--on-primary);
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 34px;
+          height: 34px;
+          position: relative;
+          z-index: 1;
+
+          &::after {
+            content: '';
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--on-primary);
+            border-radius: 999px;
+            z-index: -1;
+          }
+        }
+      }
+
+      // 중간
+      &:has(> span > span.range-middle) {
+        border-radius: 0;
+        background: var(--surface-container-mid);
+
+        >span[aria-selected="true"]>span {
+          background: transparent;
+          border: none;
+          color: var(--on-primary-container);
+          font-weight: 600;
+        }
+      }
+
+      // 끝
+      &:has(> span > span.range-end) {
+        border-top-right-radius: 999px;
+        border-bottom-right-radius: 999px;
+
+        //background: var(--surface-container-mid);
+        >span[aria-selected="true"] {
+          position: relative;
+          border-radius: 0;
+
+          &::after {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background-color: var(--surface-container-mid);
+            z-index: 0;
+            content: '';
+          }
+        }
+
+        >span[aria-selected="true"]>span {
+          position: relative;
+          z-index: 5;
+          background: var(--primary);
+          color: var(--on-primary);
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 34px;
+          height: 34px;
+          position: relative;
+          z-index: 1;
+        }
+      }
+    }
+  }
+}
+
+.oneDateCalendar {
+  & tr[data-pc-section=tablebodyrowprops] {
+    & .p-highlight[aria-selected="true"] {
+      background-color: var(--primary);
+      border: 1px solid var(--primary);
+      color: var(--on-primary);
+    }
+  }
+}
+
+/* ========= table text center ========= */
+.table-center {
+
+  th,
+  td {
+    @apply text-center;
+  }
+}
